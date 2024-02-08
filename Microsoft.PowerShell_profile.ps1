@@ -5,6 +5,7 @@ $VUE = "C:\Users\USUARIO\Desktop\empleadosFrontend"
 $API = "C:\Users\USUARIO\Desktop\empleadosApi" 
 $CRINMO = "C:\xampp\htdocs\CRINMO" 
 
+
 oh-my-posh init pwsh --config 'C:\Users\USUARIO\AppData\Local\Programs\oh-my-posh\themes\clean-detailed.omp.json'  | Invoke-Expression
 
 function SwitchToNvchad  {
@@ -65,7 +66,7 @@ function GetBitacora {
           $LastDate = "M26"
 
           $dateFrom = $fechaInicial.ToShortDateString() 
-          $dateTo =  $fechaInicial.AddDays(15).ToShortDateString()
+          $dateTo =  $fechaInicial.AddDays(15).ToShortDateString() 
 
           $longDateFrom = $fechaInicial.ToString("dd, MMMM, yyyy")
           $longDateTo =  $fechaInicial.AddDays(15).ToString("dd, MMMM, yyyy")
@@ -90,6 +91,7 @@ function GetBitacora {
 
 
 function generateBitacoras {
+
   param()
 
     $date = (Get-Date -Date "25/01/2024")
@@ -132,6 +134,20 @@ function ShowAlert {
   END {
   }
 }
+ShowAlert
 #super util para buscar roles en crinmo
-#ls C:\xampp\htdocs\CRINMO\inventarios\ -Recurse | where { Select-String -Path $_.FullName 
+function SearchForAMatch {
+  [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, HelpMessage = "Directorio a buscar")]
+        [string]$Path,
+        [Parameter(Mandatory = $true, HelpMessage = "Palabra a buscar")]
+        [string]$Word
+        )
+      PROCESS {
+        Get-ChildItem $Path -Recurse -File | Where-Object { Select-String -Path $_.FullName -SimpleMatch $Word } | 
+        Format-Table -GroupBy directoryName 
+      }
+      END {}
+}
 #-SimpleMatch "rol"} | Format-Table -GroupBy directoryname
